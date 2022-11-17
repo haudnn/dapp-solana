@@ -48,13 +48,11 @@ function View() {
           toPubkey: Keypair.generate().publicKey,
           lamports: 10 ** 8, // 0.1 SOL
         })
-        // Khi gửi 1 transaction đi cần định nghĩa transaction thời gian tồn tại là bao lấu
         const transaction = new Transaction().add(instruction)
         const {
           context: { slot: minContextSlot },
           value: { blockhash, lastValidBlockHeight },
         } = await connection.getLatestBlockhashAndContext()
-        // signature
         const signature = await sendTransaction(transaction, connection, {
           minContextSlot,
         })
@@ -70,7 +68,7 @@ function View() {
     } finally {
       return setLoading(false)
     }
-  }, [connection, publicKey, getMyBalance, sendTransaction])
+  }, [connection, publicKey, getMyBalance])
   return (
     <Layout className="container">
       <Row gutter={[24, 24]}>

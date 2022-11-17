@@ -6,13 +6,12 @@ import brand from 'static/images/solanaLogoMark.svg'
 import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import './index.less'
 import { useState, useCallback, useEffect } from 'react'
-import { Keypair, SystemProgram, Transaction } from '@solana/web3.js'
 
 function View() {
   // Get ConnectionProvider => return object
   const { connection } = useConnection()
   // Get Balance of this public key
-  const { publicKey, sendTransaction } = useWallet()
+  const { publicKey } = useWallet()
   const [balance, setBalance] = useState(0)
   const [loading, setLoading] = useState(false)
   const getMyBalance = useCallback(async () => {
@@ -32,45 +31,12 @@ function View() {
         await connection.requestAirdrop(publicKey, 10 ** 8)
         return getMyBalance()
       }
-    } catch (err: any) {
-      console.log(err.message)
+    } catch (err) {
+      console.log(err)
     } finally {
       return setLoading(false)
     }
   }, [connection, publicKey, getMyBalance])
-  const transfer = useCallback(async () => {
-    try {
-      setLoading(true)
-      if (publicKey) {
-        // Transfer SOL
-        const instruction = SystemProgram.transfer({
-          fromPubkey: publicKey,
-          toPubkey: Keypair.generate().publicKey,
-          lamports: 10 ** 8, // 0.1 SOL
-        })
-        // Khi gửi 1 transaction đi cần định nghĩa transaction thời gian tồn tại là bao lấu
-        const transaction = new Transaction().add(instruction)
-        const {
-          context: { slot: minContextSlot },
-          value: { blockhash, lastValidBlockHeight },
-        } = await connection.getLatestBlockhashAndContext()
-        // signature
-        const signature = await sendTransaction(transaction, connection, {
-          minContextSlot,
-        })
-        await connection.confirmTransaction({
-          blockhash,
-          lastValidBlockHeight,
-          signature,
-        })
-        return getMyBalance()
-      }
-    } catch (err: any) {
-      console.log(err.message)
-    } finally {
-      return setLoading(false)
-    }
-  }, [connection, publicKey, getMyBalance, sendTransaction])
   return (
     <Layout className="container">
       <Row gutter={[24, 24]}>
@@ -100,24 +66,14 @@ function View() {
             <Typography.Title>
               My Blance: {balance / 10 ** 9} SOL
             </Typography.Title>
-            <Space>
-              <Button
-                type="primary"
-                size="large"
-                onClick={airdrop}
-                loading={loading}
-              >
-                Airdrop
-              </Button>
-              <Button
-                type="primary"
-                size="large"
-                onClick={transfer}
-                loading={loading}
-              >
-                Transfer
-              </Button>
-            </Space>
+            <Button
+              type="primary"
+              size="large"
+              onClick={airdrop}
+              loading={loading}
+            >
+              Airdrop
+            </Button>
           </Space>
         </Col>
       </Row>

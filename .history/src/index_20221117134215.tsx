@@ -20,12 +20,10 @@ createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
   {/* ConnectionProvider: Create connection of my app to Solana Application, config enpoint  */}
     <ConnectionProvider endpoint={endpoint}>
-      {/* WalletProvider: Define wallet support in dApp  */}
       <WalletProvider
         wallets={[new PhantomWalletAdapter(), new Coin98WalletAdapter()]}
         autoConnect
       >
-        {/* Define UI for user */}
         <WalletModalProvider>
           <View />
         </WalletModalProvider>

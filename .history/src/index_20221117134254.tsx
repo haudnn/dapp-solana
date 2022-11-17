@@ -25,7 +25,6 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         wallets={[new PhantomWalletAdapter(), new Coin98WalletAdapter()]}
         autoConnect
       >
-        {/* Define UI for user */}
         <WalletModalProvider>
           <View />
         </WalletModalProvider>

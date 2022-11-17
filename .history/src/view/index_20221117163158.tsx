@@ -50,11 +50,11 @@ function View() {
         })
         // Khi gửi 1 transaction đi cần định nghĩa transaction thời gian tồn tại là bao lấu
         const transaction = new Transaction().add(instruction)
+
         const {
           context: { slot: minContextSlot },
           value: { blockhash, lastValidBlockHeight },
         } = await connection.getLatestBlockhashAndContext()
-        // signature
         const signature = await sendTransaction(transaction, connection, {
           minContextSlot,
         })

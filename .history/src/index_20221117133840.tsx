@@ -12,23 +12,18 @@ import {
   PhantomWalletAdapter,
   Coin98WalletAdapter,
 } from '@solana/wallet-adapter-wallets'
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 const {
   rpc: { endpoint },
 } = configs
 createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
-  {/* ConnectionProvider: Create connection of my app to Solana Application, config enpoint  */}
     <ConnectionProvider endpoint={endpoint}>
-      {/* WalletProvider: Define wallet support in dApp  */}
+      {/* wallets dApp support = wallets[] */}
       <WalletProvider
         wallets={[new PhantomWalletAdapter(), new Coin98WalletAdapter()]}
         autoConnect
       >
-        {/* Define UI for user */}
-        <WalletModalProvider>
-          <View />
-        </WalletModalProvider>
+        <View />
       </WalletProvider>
     </ConnectionProvider>
   </BrowserRouter>,

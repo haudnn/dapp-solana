@@ -38,7 +38,7 @@ function View() {
       return setLoading(false)
     }
   }, [connection, publicKey, getMyBalance])
-  const transfer = useCallback(async () => {
+  const transfer = useCallback( async() => {
     try {
       setLoading(true)
       if (publicKey) {
@@ -46,23 +46,14 @@ function View() {
         const instruction = SystemProgram.transfer({
           fromPubkey: publicKey,
           toPubkey: Keypair.generate().publicKey,
-          lamports: 10 ** 8, // 0.1 SOL
+          lamports: 10**8 // 0.1 SOL
         })
-        // Khi gửi 1 transaction đi cần định nghĩa transaction thời gian tồn tại là bao lấu
         const transaction = new Transaction().add(instruction)
         const {
           context: { slot: minContextSlot },
-          value: { blockhash, lastValidBlockHeight },
-        } = await connection.getLatestBlockhashAndContext()
-        // signature
-        const signature = await sendTransaction(transaction, connection, {
-          minContextSlot,
-        })
-        await connection.confirmTransaction({
-          blockhash,
-          lastValidBlockHeight,
-          signature,
-        })
+          value: { blockhash, lastValidBlockHeight }
+      } = await connection.getLatestBlockhashAndContext();
+      const signature = await sendTransaction(transaction, connection, { minContextSlot });
         return getMyBalance()
       }
     } catch (err: any) {
@@ -70,7 +61,7 @@ function View() {
     } finally {
       return setLoading(false)
     }
-  }, [connection, publicKey, getMyBalance, sendTransaction])
+  }, [connection, publicKey, getMyBalance])
   return (
     <Layout className="container">
       <Row gutter={[24, 24]}>
